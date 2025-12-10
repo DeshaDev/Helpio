@@ -2,7 +2,6 @@ import { MessageCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ConnectButton } from 'thirdweb/react';
-import { client, accountAbstraction } from '../config/thirdweb';
 import { inAppWallet } from 'thirdweb/wallets';
 
 export function Header() {
