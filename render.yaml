@@ -1,0 +1,17 @@
+# render.yaml
+services:
+  - type: web
+    name: helpio
+    env: static   # use 'web' if you need a server, 'static' is enough for Vite preview
+    branch: main
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000  # Render will override this dynamically
+    buildEnvironment:
+      nodeVersion: "18.x"
+      npmVersion: "9.x"
