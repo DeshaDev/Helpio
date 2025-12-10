@@ -8,7 +8,7 @@ import { celo } from "@thirdweb-dev/chains";
 
 const contract = getContract({
   client,   // uses your Thirdweb client configured with sponsorGas: false
-  chain,
+  chain: celo,
   address: CONTRACT_ADDRESS,
   abi: CONTRACT_ABI,
 });
