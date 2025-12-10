@@ -1,13 +1,14 @@
-// hooks/useContract.ts
-import { useState } from 'react';
-import { useSendTransaction, useReadContract, useActiveAccount } from 'thirdweb/react';
-import { prepareContractCall, getContract } from 'thirdweb';
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
+import { useState } from "react";
+import { useSendTransaction, useReadContract, useActiveAccount } from "thirdweb/react";
+import { prepareContractCall, getContract } from "thirdweb";
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../lib/contract";
+
+// FIX: import client + chain
 import { client } from "../lib/thirdweb";
-import { celo } from "@thirdweb-dev/chains"; 
+import { celo } from "@thirdweb-dev/chains"; // <-- عدّل الشبكة
 
 const contract = getContract({
-  client,   // uses your Thirdweb client configured with sponsorGas: false
+  client,
   chain: celo,
   address: CONTRACT_ADDRESS,
   abi: CONTRACT_ABI,
