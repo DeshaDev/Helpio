@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useSendTransaction, useReadContract, useActiveAccount } from "thirdweb/react";
 import { prepareContractCall, getContract } from "thirdweb";
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../config/thirdweb";
 
-// FIX: import client + chain
-import { client } from "../lib/thirdweb";
+// Import contract details from lib folder
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../lib/contract";
+
+// Import client from config folder
+import { client } from "../config/thirdweb";
 import { celo } from "thirdweb/chains";
 
 const contract = getContract({
