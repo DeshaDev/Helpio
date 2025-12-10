@@ -10,8 +10,6 @@ import { useActiveAccount } from 'thirdweb/react';
 import { LayoutGrid, List } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
-
-
 function AppContent() {
   const account = useActiveAccount();
   const isConnected = !!account;
@@ -110,13 +108,12 @@ function AppContent() {
 
 function App() {
   return (
-    <ThirdwebProvider client={client}>
-      <AuthProvider>
+    <ThirdwebProvider>
+      <LanguageProvider>
         <AppContent />
-      </AuthProvider>
+      </LanguageProvider>
     </ThirdwebProvider>
   );
 }
-
 
 export default App;
