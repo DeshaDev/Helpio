@@ -9,7 +9,6 @@ import { WalletFundingNotification } from './components/WalletFundingNotificatio
 import { useActiveAccount } from 'thirdweb/react';
 import { LayoutGrid, List } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-import { chain, client, accountAbstraction } from './lib/thirdweb';
 
 
 
