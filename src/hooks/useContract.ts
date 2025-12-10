@@ -5,11 +5,11 @@ import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../lib/contract";
 
 // FIX: import client + chain
 import { client } from "../lib/thirdweb";
-import { celo } from "@thirdweb-dev/chains"; // <-- عدّل الشبكة
+import { celoMainnet } from "thirdweb/chains";
 
 const contract = getContract({
   client,
-  chain: celo,
+  chain: celoMainnet,
   address: CONTRACT_ADDRESS,
   abi: CONTRACT_ABI,
 });
