@@ -5,11 +5,11 @@ import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../lib/contract";
 
 // FIX: import client + chain
 import { client } from "../lib/thirdweb";
-import { CELO } from "@thirdweb-dev/chains";
+import { celo } from "thirdweb/chains";
 
 const contract = getContract({
   client,
-  chain: CELO,
+  chain: celo,
   address: CONTRACT_ADDRESS,
   abi: CONTRACT_ABI,
 });
