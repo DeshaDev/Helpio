@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useSendTransaction, useReadContract, useActiveAccount } from 'thirdweb/react';
 import { prepareContractCall, getContract } from 'thirdweb';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
+import { client } from "../lib/thirdweb";
+import { celo } from "@thirdweb-dev/chains"; 
 
 const contract = getContract({
   client,   // uses your Thirdweb client configured with sponsorGas: false
