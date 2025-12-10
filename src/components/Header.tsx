@@ -3,10 +3,11 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ConnectButton } from 'thirdweb/react';
 import { inAppWallet } from 'thirdweb/wallets';
+import { client } from '../config/thirdweb';
 
 export function Header() {
   const { t } = useLanguage();
-
+  
   const wallets = [
     inAppWallet({
       auth: {
@@ -30,14 +31,12 @@ export function Header() {
               <p className="text-xs text-gray-500">{t.header.subtitle}</p>
             </div>
           </div>
-
+          
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
-
             <ConnectButton
               client={client}
               wallets={wallets}
-              accountAbstraction={accountAbstraction}
               connectButton={{
                 label: t.header.connectWallet,
                 style: {
