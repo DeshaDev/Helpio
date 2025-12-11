@@ -41,8 +41,8 @@ export function WalletFundingNotification() {
             </p>
             <p className="text-sm text-gray-600 mt-1">
               {language === 'en'
-                ? 'Sending 0.12 CELO to get you started!'
-                : 'إرسال 0.12 CELO للبدء!'}
+                ? 'Sending 0.20 CELO to get you started!'
+                : 'إرسال 0.20 CELO للبدء!'}
             </p>
           </div>
         </div>
