@@ -27,10 +27,8 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
     content: string;
     category: string;
   } | null>(null);
-
   const account = useActiveAccount();
   const address = account?.address;
-
   const { askQuestion, isPending, isSuccess, receipt } = useAskQuestion();
 
   useEffect(() => {
@@ -40,17 +38,29 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
   }, [isOpen]);
 
   useEffect(() => {
+    console.log('AskQuestion useEffect:', {
+      isSuccess,
+      isPending,
+      receipt,
+      hasPendingData: !!pendingQuestionData,
+      address
+    });
+
     if (isSuccess && receipt && pendingQuestionData && address) {
+      console.log('✅ Transaction confirmed! Saving to database...');
       saveToDatabase();
     }
   }, [isSuccess, receipt, pendingQuestionData, address]);
 
   const saveToDatabase = async () => {
-    if (!pendingQuestionData || !address || !receipt) return;
+    if (!pendingQuestionData || !address || !receipt) {
+      console.log('Missing data for save:', { pendingQuestionData, address, receipt });
+      return;
+    }
 
+    console.log('Saving question to database...');
     try {
       let userId = null;
-
       const { data: existingUser } = await supabase
         .from('users')
         .select('id, total_points')
@@ -64,7 +74,6 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
           .from('users')
           .update({ total_points: existingUser.total_points + 5 })
           .eq('id', userId);
-
       } else {
         const { data: newUser } = await supabase
           .from('users')
@@ -76,7 +85,7 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
       }
 
       await supabase.from('questions').insert({
-        id: pendingQuestionData.questionId, // SAME STRING ID USED IN CONTRACT
+        id: pendingQuestionData.questionId,
         user_id: userId,
         wallet_address: address,
         title: pendingQuestionData.title,
@@ -85,13 +94,13 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
         tx_hash: receipt.transactionHash,
       });
 
+      console.log('Question saved successfully!');
       setTitle('');
       setContent('');
       setCategory('general');
       setPendingQuestionData(null);
       setIsOpen(false);
       onSuccess();
-
     } catch (error) {
       console.error('Error saving to database:', error);
     }
@@ -116,7 +125,9 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
     e.preventDefault();
     if (!address || !title || !content || !category) return;
 
-    const questionId = crypto.randomUUID(); // CONTRACT USES THIS STRING
+    const questionId = crypto.randomUUID();
+
+    console.log('Submitting question:', { questionId, category, title });
 
     setPendingQuestionData({
       questionId,
@@ -125,7 +136,6 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
       category,
     });
 
-    // CONTRACT WILL HASH THE STRING -> bytes32 internally
     askQuestion(questionId, category);
   };
 
@@ -162,13 +172,81 @@ export function AskQuestion({ onSuccess }: AskQuestionProps) {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* category input */}
-            {/* title input */}
-            {/* content input */}
-            {/* points display */}
-            {/* buttons */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Category
+              </label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white"
+                required
+              >
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.slug}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            {/* ... your form unchanged ... */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Question Title
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="What would you like to know?"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Details
+              </label>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Provide more context and details..."
+                rows={6}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"
+                required
+              />
+            </div>
+
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+              <p className="text-sm text-emerald-800">
+                <span className="font-semibold">+5 points</span> will be awarded for asking this question
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  if (!isPending) {
+                    setIsOpen(false);
+                    setPendingQuestionData(null);
+                  }
+                }}
+                disabled={isPending}
+                className="flex-1 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isPending}
+                className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isPending && <Loader2 className="animate-spin" size={20} />}
+                {isPending ? 'Confirming...' : 'Post Question'}
+              </button>
+            </div>
           </form>
         </div>
       </div>
