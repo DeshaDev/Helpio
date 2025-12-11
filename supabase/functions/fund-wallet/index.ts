@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-const FUNDING_AMOUNT = "0.12"; // CELO amount to send
+const FUNDING_AMOUNT = "0.20"; // CELO amount to send
 const CELO_RPC_URL = "https://forno.celo.org";
 
 Deno.serve(async (req: Request) => {
